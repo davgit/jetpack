@@ -23,20 +23,20 @@ class WordAds {
 	 * @var array
 	 */
 	public static $ad_tag_ids = array(
-		'mrec'           => array(
+		'mrec' => array(
 			'tag'    => '300x250_mediumrectangle',
 			'height' => '250',
 			'width'  => '300',
 		),
-		'lrec'           => array(
-			'tag'    => '336x280_largerectangle',
-			'height' => '280',
-			'width'  => '336',
-		),
-		'leaderboard'    => array(
+		'leaderboard' => array(
 			'tag'    => '728x90_leaderboard',
 			'height' => '90',
 			'width'  => '728',
+		),
+		'mobile_leaderboard' => array(
+			'tag'    => '320x50_mobileleaderboard',
+			'height' => '50',
+			'width'  => '320',
 		),
 		'wideskyscraper' => array(
 			'tag'    => '160x600_wideskyscraper',
@@ -432,18 +432,7 @@ HTML;
 			}
 		}
 
-		$header = 'top' == $spot ? 'wpcnt-header' : '';
-		$about  = __( 'Advertisements', 'jetpack' );
-		return <<<HTML
-		<div class="wpcnt $header">
-			<div class="wpa">
-				<span class="wpa-about">$about</span>
-				<div class="u $spot">
-					$snippet
-				</div>
-			</div>
-		</div>
-HTML;
+		return $this->get_ad_div( $spot, $snippet );
 	}
 
 
@@ -466,10 +455,7 @@ HTML;
 			'height'   => $height,
 		);
 		$ad_number   = count( $this->ads );
-		// Max 6 ads per page.
-		if ( $ad_number > 5 && 'top' !== $location ) {
-			return;
-		}
+
 		$data_tags = $this->params->cloudflare ? ' data-cfasync="false"' : '';
 
 		return <<<HTML
@@ -486,6 +472,40 @@ HTML;
 					});
 				});
 				</script>
+			</div>
+		</div>
+HTML;
+	}
+
+	/**
+	 * Returns the completed ad div with snipped to be inserted into the page
+	 *
+	 * @param  string  $spot top, side, inline, or belowpost
+	 * @param  string  $snippet The snippet to insert into the div
+	 * @param  array  $css_classes
+	 * @return string The supporting ad unit div
+	 *
+	 * @since 7.1
+	 */
+	function get_ad_div( $spot, $snippet, array $css_classes = array() ) {
+		if ( empty( $css_classes ) ) {
+			$css_classes = array();
+		}
+
+		$css_classes[] = 'wpcnt';
+		if ( 'top' == $spot ) {
+			$css_classes[] = 'wpcnt-header';
+		}
+
+		$classes = esc_attr( implode( ' ', $css_classes ) );
+		$about  = __( 'Advertisements', 'jetpack' );
+		return <<<HTML
+		<div class="$classes">
+			<div class="wpa">
+				<span class="wpa-about">$about</span>
+				<div class="u $spot">
+					$snippet
+				</div>
 			</div>
 		</div>
 HTML;
