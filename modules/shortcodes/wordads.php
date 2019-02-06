@@ -66,15 +66,7 @@ class Jetpack_WordAds_Shortcode {
 	public static function gutenblock_render( $attr ) {
 		global $wordads;
 
-		/**
-		 * Allow third-party tools to disable the display of in post ads.
-		 *
-		 * @module wordads
-		 *
-		 * @since 4.5.0
-		 *
-		 * @param bool true Should the in post unit be disabled. Default to false.
-		 */
+		/** This filter is already documented in modules/wordads/wordads.php `insert_ad()` */
 		if ( is_feed() || apply_filters( 'wordads_inpost_disable', false ) ) {
 			return '';
 		}
@@ -97,7 +89,7 @@ class Jetpack_WordAds_Shortcode {
 
 		$height = WordAds::$ad_tag_ids[$format]['height'];
 		$width = WordAds::$ad_tag_ids[$format]['width'];
-		$snippet = $wordads->get_ad_snippet( $section_id, $height, $width, 'inline', 'inpost', 'float:left;margin-right:5px;margin-top:0px;' );
+		$snippet = $wordads->get_ad_snippet( $section_id, $height, $width, 'inline', 'float:left;margin-right:5px;margin-top:0px;' );
 		return $wordads->get_ad_div( 'inline', $snippet, array( $align ) );
 	}
 }

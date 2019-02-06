@@ -457,6 +457,7 @@ HTML;
 		$ad_number   = count( $this->ads );
 
 		$data_tags = $this->params->cloudflare ? ' data-cfasync="false"' : '';
+		$css = esc_attr( $css );
 
 		return <<<HTML
 		<div style="padding-bottom:15px;width:{$width}px;height:{$height}px;$css">
@@ -497,8 +498,9 @@ HTML;
 			$css_classes[] = 'wpcnt-header';
 		}
 
+		$spot = esc_attr( $spot );
 		$classes = esc_attr( implode( ' ', $css_classes ) );
-		$about  = __( 'Advertisements', 'jetpack' );
+		$about  = esc_html__( 'Advertisements', 'jetpack' );
 		return <<<HTML
 		<div class="$classes">
 			<div class="wpa">
